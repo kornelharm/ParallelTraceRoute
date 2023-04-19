@@ -14,33 +14,38 @@
 #define ICMP_ECHO_REQUEST	8
 
 #pragma pack(push, 1)
+
 class IPHeader {
 public:
-	unsigned char	h_len : 4;		// Length of header in DWORDs
-	unsigned char	version : 4;	// IP version
-	unsigned char	h_len : 4;		// Type of service
-	unsigned short	len;			// Type of packet
-	unsigned short	ident;			// Unique identifier
-	unsigned short	flags;			// Flags & fragment Offset
-	unsigned char	ttl;			// Time to live
-	unsigned char	proto;			// Protocol # (TCP=6, UDP=17...)
-	unsigned short	checksum;
+	u_char	h_len : 4;		// Length of header in DWORDs
+	u_char	version : 4;	// IP version
+	u_char	h_len : 4;		// Type of service
+	u_short	len;			// Type of packet
+	u_short	ident;			// Unique identifier
+	u_short	flags;			// Flags & fragment Offset
+	u_char	ttl;			// Time to live
+	u_char	proto;			// Protocol # (TCP=6, UDP=17...)
+	u_short	checksum;
 	unsigned long	srcIP;
 	unsigned long	destIP;
 };
 
 class ICMPHeader{
 public:
-	unsigned char	type;			// ICMP packet type
-	unsigned char	code;			// Subcode
-	unsigned short	checksum;		// ICMP checksum
-	unsigned short	id;				// ID from application
-	unsigned short	seq;			// Sequence number from application
+	u_char	type;			// ICMP packet type
+	u_char	code;			// Subcode
+	u_short	checksum;		// ICMP checksum
+	u_short	id;				// ID from application
+	u_short	seq;			// Sequence number from application
 };
 #pragma pack(pop)
 
-unsigned short checksum(unsigned short *buffer, int size);
+// Returns the checksum on the specified buffer
+u_short checksum(u_short *buffer, int size);
+// Fills a buffer with the necessary information to make an ICMP echo request
 void fillICMPRequest(ICMPHeader *head, int ttl);
+// Sends an echo request to a host described by socket
+void sendProbe(SOCKET socket, int ttl);
 
 class Tracer
 {

@@ -2,6 +2,10 @@
 #ifndef PCH_H
 #define PCH_H
 
-#include "windows.h"
+#include <iostream>
+#include <Windows.h>
+
+
+#pragma comment(lib, "ws2_32.lib")
 
 #endif //PCH_H
