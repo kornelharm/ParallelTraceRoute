@@ -4,7 +4,10 @@
 
 #include <iostream>
 #include <Windows.h>
-
+#include <list>
+#include <string>
+#include <set>
+#include <map>
 
 #pragma comment(lib, "ws2_32.lib")
 

@@ -14,7 +14,6 @@
 #define ICMP_ECHO_REQUEST	8
 
 #pragma pack(push, 1)
-
 class IPHeader {
 public:
 	u_char	h_len : 4;		// Length of header in DWORDs
@@ -42,15 +41,39 @@ public:
 
 // Returns the checksum on the specified buffer
 u_short checksum(u_short *buffer, int size);
+
 // Fills a buffer with the necessary information to make an ICMP echo request
 void fillICMPRequest(ICMPHeader *head, int ttl);
+
 // Sends an echo request to a host described by socket
-void sendProbe(SOCKET socket, int ttl);
+int sendProbe(SOCKET socket, int ttl);
+
+// Updates results with new TraceHop from assigned IP, returns 0 on success or >0 for failure
+int receiveProbe(SOCKET socket, in_addr fromIP, std::map<in_addr, TraceHop> *results, double timeout);
+
+// Defines the parameters of a specific hop
+class TraceHop {
+public:
+	in_addr IP;
+	double RTT;
+	std::string name;
+};
+
+class Route {
+public:
+	in_addr destination;
+	std::list<TraceHop> hops;
+	bool success;
+
+	int hops(); // Returns number of hops
+};
 
 class Tracer
 {
 private:
-
+	SOCKET socket;
+	bool performDNS;
 public:
+	Route performTrace(in_addr ip);
 };
 
